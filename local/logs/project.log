@@ -1,0 +1,16 @@
+2025-09-24 11:19:25-log: [Package] menu@1.0.0 enable
+2025-09-24 11:19:25-log: [Package] profile@1.0.0 enable
+2025-09-24 11:19:25-log: [Package] program@1.0.0 enable
+2025-09-24 11:19:25-log: [Package] tester@1.0.0 enable
+2025-09-24 11:19:25-log: [Package] messages@1.0.0 enable
+2025-09-24 11:19:25-log: [Package] preferences@1.0.0 enable
+2025-09-24 11:19:25-log: [Package] ui-kit@1.0.0 enable
+2025-09-24 11:19:25-log: [Package] engine@1.0.5 enable
+2025-09-24 11:19:25-log: Setup mods mgr.: 298.647ms
+2025-09-24 11:19:25-log: [Package] device@1.0.1 enable
+2025-09-24 11:19:28-log: [Package] asset-db@1.0.0 enable
+2025-09-24 11:19:28-log: [Package] programming@1.0.0 enable
+2025-09-24 11:19:28-log: [Package] project@1.0.1 enable
+2025-09-24 11:19:28-log: [Package] about@1.0.0 enable
+2025-09-24 11:19:28-log: [Package] console@1.0.0 enable
+2025-09-24 11:19:28-log: [Package] scene@1.0.0 enable

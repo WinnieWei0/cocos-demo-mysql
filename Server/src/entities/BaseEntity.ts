@@ -1,13 +1,9 @@
-import { PrimaryKey, Property, SerializedPrimaryKey } from '@mikro-orm/core';
-import { ObjectId } from '@mikro-orm/mongodb';
+import { PrimaryKey, Property } from '@mikro-orm/core';
 
 export abstract class BaseEntity {
 
   @PrimaryKey()
-  _id!: ObjectId;
-
-  @SerializedPrimaryKey()
-  id!: string;
+  id!: number;
 
   @Property()
   createdAt = new Date();

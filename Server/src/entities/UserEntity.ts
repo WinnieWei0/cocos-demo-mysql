@@ -1,7 +1,4 @@
 import { Entity, Property } from "@mikro-orm/core";
-import { Position } from "../rooms/schema/Position";
-import { Rotation } from "../rooms/schema/Rotation";
-import { AvatarState } from "../rooms/schema/AvatarState";
 import { BaseEntity } from './BaseEntity';
 
 /**
@@ -18,8 +15,24 @@ export class User extends BaseEntity {
     @Property() activeSessionId: string;
     @Property() progress: string = "0,0";
     @Property() prevGrid: string = "0,0";
-    @Property() position: Position;
-    @Property() rotation: Rotation;
-    @Property() avatar: AvatarState
+    
+    // Position fields (flattened for MySQL)
+    @Property() positionX: number;
+    @Property() positionY: number;
+    @Property() positionZ: number;
+    
+    // Rotation fields (flattened for MySQL)
+    @Property() rotationX: number;
+    @Property() rotationY: number;
+    @Property() rotationZ: number;
+    @Property() rotationW: number;
+    
+    // Avatar fields (flattened for MySQL)
+    @Property() avatarSkinColor: string = "default";
+    @Property() avatarShirtColor: string = "default";
+    @Property() avatarPantsColor: string = "default";
+    @Property() avatarHatColor: string = "default";
+    @Property() avatarHatChoice: number = 1;
+    
     @Property() coins: number;
 }

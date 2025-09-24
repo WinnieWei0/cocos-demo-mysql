@@ -4,10 +4,8 @@ import { DI } from "../config/database.config";
 import * as matchmakerHelper from "../helpers/matchmakerHelper";
 import * as interactableObjectFactory from "../helpers/interactableObjectFactory";
 import { User } from "../entities/UserEntity";
-import { EntityManager, EntityRepository } from "@mikro-orm/mongodb";
+import { EntityManager, EntityRepository } from "@mikro-orm/core";
 import { IDatabaseDriver } from "@mikro-orm/core";
-import { Position } from "./schema/Position";
-import { Rotation } from "./schema/Rotation";
 import { AvatarState } from "./schema/AvatarState";
 import { Vector, Vector2, Vector3 } from "../helpers/Vectors";
 
@@ -88,31 +86,30 @@ export class MMORoom extends Room<RoomState> {
       username: auth.username
     });
 
-    if (auth.position != null) {
+    if (auth.positionX != null && auth.positionY != null && auth.positionZ != null) {
       newNetworkedUser.assign({
-        xPos: auth.position.x,
-        yPos: auth.position.y,
-        zPos: auth.position.z,
+        xPos: auth.positionX,
+        yPos: auth.positionY,
+        zPos: auth.positionZ,
       });
-
     }
 
-    if (auth.rotation != null) {
+    if (auth.rotationX != null && auth.rotationY != null && auth.rotationZ != null) {
       newNetworkedUser.assign({
-        xRot: auth.rotation.x,
-        yRot: auth.rotation.y,
-        zRot: auth.rotation.z,
+        xRot: auth.rotationX,
+        yRot: auth.rotationY,
+        zRot: auth.rotationZ,
+        wRot: auth.rotationW || 0,
       });
-
     }
 
-    if (auth.avatar != null) {
+    if (auth.avatarSkinColor != null) {
       newNetworkedUser.avatar = new AvatarState().assign({
-        skinColor: auth.avatar.skinColor,
-        shirtColor: auth.avatar.shirtColor,
-        pantsColor: auth.avatar.pantsColor,
-        hatColor: auth.avatar.hatColor,
-        hatChoice: auth.avatar.hatChoice,
+        skinColor: auth.avatarSkinColor,
+        shirtColor: auth.avatarShirtColor,
+        pantsColor: auth.avatarPantsColor,
+        hatColor: auth.avatarHatColor,
+        hatChoice: auth.avatarHatChoice,
       });
     }
 
@@ -136,8 +133,23 @@ export class MMORoom extends Room<RoomState> {
     if (user) {
       // Clear the user's active session
       user.activeSessionId = "";
-      user.position = this.state.getUserPosition(client.sessionId);
-      user.rotation = this.state.getUserRotation(client.sessionId);
+      
+      // Update position fields
+      const position = this.state.getUserPosition(client.sessionId);
+      if (position) {
+        user.positionX = position.x;
+        user.positionY = position.y;
+        user.positionZ = position.z;
+      }
+      
+      // Update rotation fields
+      const rotation = this.state.getUserRotation(client.sessionId);
+      if (rotation) {
+        user.rotationX = rotation.x;
+        user.rotationY = rotation.y;
+        user.rotationZ = rotation.z;
+        user.rotationW = rotation.w || 0;
+      }
 
       // Save the user's changes to the database
       await userRepo.flush();
@@ -263,8 +275,21 @@ export class MMORoom extends Room<RoomState> {
     user.progress = newGridString;
     user.prevGrid = progress;
     user.pendingSessionId = seatReservation.sessionId;
-    user.position = new Position().assign(position);
-    user.rotation = this.state.getUserRotation(client.sessionId);
+    
+    // Update position fields
+    user.positionX = position.x;
+    user.positionY = position.y;
+    user.positionZ = position.z;
+    
+    // Update rotation fields
+    const rotation = this.state.getUserRotation(client.sessionId);
+    if (rotation) {
+      user.rotationX = rotation.x;
+      user.rotationY = rotation.y;
+      user.rotationZ = rotation.z;
+      user.rotationW = rotation.w || 0;
+    }
+    
     user.updatedAt = new Date();
 
     // Save the user's changes to the database
